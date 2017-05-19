@@ -1,0 +1,66 @@
+<?php $this->partial('shared/header'); ?>
+
+<div class="container">
+    <div class="row">
+        <div class="col-md-3">
+            <div class="panel panel-default">
+                <div class="panel-body">
+                    Total result: <?= number_format($total, 0, '.','.'); ?>
+                </div>
+            </div>
+            
+        </div>
+        <?php $ref = $this->req->url; ?>
+        <div class="col-md-9">
+            <div class="page-header">
+                <?php if($this->can_i->create_site_menu): ?>
+                <a class="btn btn-primary pull-right" href="<?= $this->router->to('adminSiteMenuEdit', ['id'=>0], ['ref'=>$ref]) ?>">Create New</a>
+                <?php endif; ?>
+                <h3>Site Menus</h3>
+            </div>
+            
+            <?php if($menus): ?>
+            <?php
+                $can_delete     = $this->can_i->remove_site_menu;
+                $can_edit       = $this->can_i->update_site_menu;
+            ?>
+            
+            <div class="list-group">
+                <?php foreach($menus as $menu): ?>
+                <div class="list-group-item">
+                    
+                    <?php if($can_delete || $can_edit): ?>
+                    <div class="btn-group btn-group-xs pull-right">
+                        <?php if($can_edit): ?>
+                        <a href="<?= $this->router->to('adminSiteMenuEdit', ['id'=>$menu->id], ['ref'=>$ref]) ?>" class="btn btn-default" title="Edit">
+                            <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
+                        </a>
+                        <?php endif; ?>
+                        <?php if($can_delete): ?>
+                        <button id="site-menu-<?= $menu->id ?>" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" class="btn btn-default">
+                            <span class="caret"></span>
+                        </button>
+                        <ul class="dropdown-menu" aria-labelledby="site-menu-<?= $menu->id ?>">
+                            <li>
+                                <a href="<?= $this->router->to('adminSiteMenuRemove', ['id'=>$menu->id], ['ref'=>$ref]) ?>" data-confirm="Delete Confirmation" data-confirm-message="Are you sure want to delete this site menu? This action can't be undone." title="Delete" aria-label="Delete">
+                                    <i class="fa fa-trash" aria-hidden="true"></i> Delete
+                                </a>
+                            </li>
+                        <?php endif; ?>
+                        </ul>
+                    </div>
+                    <?php endif; ?>
+                    
+                    <h4 class="list-group-item-heading"><?= $menu->name ?></h4>
+                    <p class="list-group-item-text small">
+                        <span title="Created"><i class="fa fa-calendar-plus-o" aria-hidden="true"></i> <?= date('M d, Y', strtotime($menu->created)) ?></span>
+                    </p>
+                </div>
+                <?php endforeach; ?>
+            </div>
+            <?php endif; ?>
+        </div>
+    </div>
+</div>
+
+<?php $this->partial('shared/footer'); ?>
