@@ -45,7 +45,7 @@ class Menu
             else {
                 $menus = prop_as_key($menus, 'name');
                 foreach($menus as $index => $menu){
-                    $menu['links'] = json_decode($menu['links']);
+                    $menu->links = json_decode($menu->links);
                     $menus[$index] = $menu;
                 }
                 
